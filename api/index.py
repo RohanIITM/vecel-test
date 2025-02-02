@@ -20,4 +20,4 @@ def api_get(name: list[str] = Query([])) -> dict[str, list[int]]:
     with open("students.json") as file:
         student_data = json.load(file)
 
-    return {"marks": [student_data[name] for name in names]}
+    return {"marks": [student_data[n] for n in name if n in student_data]}
