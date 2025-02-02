@@ -14,10 +14,14 @@ app.add_middleware(
 )
 
 
-@app.get("/api")
-def api_get(name: list[str] = Query([])) -> dict[str, list[int]]:
+with open("students.json") as file:
+    STUDENT_DATA = json.load(file)
 
-    with open("students.json") as file:
-        student_data = json.load(file)
 
-    return {"marks": [student_data[n] for n in name if n in student_data]}
+def student_get(name: str) -> int:
+    return next((d["marks"] for d in STUDENT_DATA if d["name"] == name), None)
+
+
+@app.get("/api/")
+def api_get(name: list[str] = Query([])):
+    return {"marks": [student_get(n) for n in name]}
